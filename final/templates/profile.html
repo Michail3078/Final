@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Профиль - PC Components Store
+{% endblock %}
+
+{% block menu %}
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img src="{{ url_for('static', filename='img/icon1.png') }}" alt="Logo" width="30" height="30">
+      PC Components Store
+    </a>
+    <div class="ms-auto">
+      <span class="navbar-text me-3 text-white">Привет, {{ current_user.username }}!</span>
+      <a href="/logout" class="btn btn-outline-danger btn-sm">Выйти</a>
+    </div>
+  </div>
+</nav>
+<div class="bg-secondary bg-opacity-10 py-2">
+  <div class="container">
+    <ul class="nav nav-pills">
+      <li class="nav-item"><a href="/" class="nav-link text-dark">Главная</a></li>
+      <li class="nav-item"><a href="/catalog" class="nav-link text-dark">Каталог</a></li>
+      <li class="nav-item"><a href="/cart" class="nav-link text-dark">Корзина</a></li>
+      <li class="nav-item"><a href="/profile" class="nav-link active bg-dark text-white">Профиль</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block main %}
+<div class="container py-4">
+    <div class="row">
+        <!-- Боковая навигация -->
+        <div class="col-md-3 mb-4">
+            <div class="list-group shadow-sm">
+                <a href="#profile-info" class="list-group-item list-group-item-action active" data-bs-toggle="list">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                    </svg>
+                    Личная информация
+                </a>
+                <a href="#orders" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                        <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M8 4a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6A.5.5 0 0 1 8 4zM4.5 6.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5zm7 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5z"/>
+                    </svg>
+                    Мои заказы
+                    {% if orders %}
+                        <span class="badge bg-primary rounded-pill ms-2">{{ orders|length }}</span>
+                    {% endif %}
+                </a>
+                <a href="#security" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                        <path d="M8 1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h5zM3 0a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h5a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"/>
+                        <path d="M5 6h1v1H5V6zm2 0h1v1H7V6zm-2 2h1v1H5V8zm2 0h1v1H7V8z"/>
+                    </svg>
+                    Безопасность
+                </a>
+            </div>
+        </div>
+
+        <!-- Контент -->
+        <div class="col-md-9">
+            <div class="tab-content">
+                <!-- Вкладка: Личная информация -->
+                <div class="tab-pane fade show active" id="profile-info">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Личная информация</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 text-center mb-4">
+                                    <img src="{{ current_user.avatar or 'https://ui-avatars.com/api/?background=0D6EFD&color=fff&name=' + current_user.username }}"
+                                         alt="Avatar"
+                                         class="rounded-circle img-fluid mb-3"
+                                         style="width: 150px; height: 150px; object-fit: cover;">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#avatarModal">
+                                        Изменить аватар
+                                    </button>
+                                </div>
+                                <div class="col-md-9">
+                                    <form method="POST">
+                                        <input type="hidden" name="action" value="update_profile">
+                                        <div class="mb-3">
+                                            <label class="form-label">Логин</label>
+                                            <input type="text" class="form-control" value="{{ current_user.username }}" disabled>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Полное имя</label>
+                                            <input type="text" class="form-control" name="full_name" value="{{ current_user.full_name or '' }}" placeholder="Введите ваше полное имя">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Телефон</label>
+                                            <input type="tel" class="form-control" name="phone" value="{{ current_user.phone or '' }}" placeholder="+7 (XXX) XXX-XX-XX">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Адрес доставки</label>
+                                            <textarea class="form-control" name="address" rows="3" placeholder="Город, улица, дом, квартира">{{ current_user.address or '' }}</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка: Мои заказы -->
+                <div class="tab-pane fade" id="orders">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">История заказов</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if orders %}
+                                {% for order in orders %}
+                                <div class="card mb-3">
+                                    <div class="card-header bg-light">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <strong>Заказ №{{ order.id }}</strong>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small class="text-muted">{{ order.order_date.strftime('%d.%m.%Y %H:%M') }}</small>
+                                            </div>
+                                            <div class="col-md-4 text-md-end">
+                                                <span class="badge
+                                                    {% if order.status == 'Ожидает обработки' %}bg-warning
+                                                    {% elif order.status == 'Подтвержден' %}bg-info
+                                                    {% elif order.status == 'В пути' %}bg-primary
+                                                    {% elif order.status == 'Доставлен' %}bg-success
+                                                    {% else %}bg-danger{% endif %}">
+                                                    {{ order.status }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Сумма:</strong> {{ order.total_amount|round|int }}₽</p>
+                                        <p><strong>Доставка:</strong> {{ order.delivery_method }} ({{ order.delivery_price }}₽)</p>
+                                        <p><strong>Адрес:</strong> {{ order.address }}</p>
+                                        <p><strong>Телефон:</strong> {{ order.phone }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-center py-5">
+                                    <img src="https://img.icons8.com/ios-glyphs/200/000000/order-history.png" alt="Нет заказов" style="width: 100px; opacity: 0.5;">
+                                    <h5 class="mt-3">У вас пока нет заказов</h5>
+                                    <a href="/catalog" class="btn btn-primary mt-3">Перейти в каталог</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вкладка: Безопасность -->
+                <div class="tab-pane fade" id="security">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Смена пароля</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST">
+                                <input type="hidden" name="action" value="change_password">
+                                <div class="mb-3">
+                                    <label class="form-label">Текущий пароль</label>
+                                    <input type="password" class="form-control" name="current_password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Новый пароль</label>
+                                    <input type="password" class="form-control" name="new_password" required minlength="6">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Подтвердите новый пароль</label>
+                                    <input type="password" class="form-control" name="confirm_password" required>
+                                </div>
+                                <button type="submit" class="btn btn-warning">Изменить пароль</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Email для уведомлений</h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST">
+                                <input type="hidden" name="action" value="update_email">
+                                <div class="mb-3">
+                                    <label class="form-label">Текущий email</label>
+                                    <input type="email" class="form-control" value="{{ current_user.email or 'Не указан' }}" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Новый email</label>
+                                    <input type="email" class="form-control" name="new_email" required>
+                                </div>
+                                <button type="submit" class="btn btn-info">Обновить email</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white">
+                            <h5 class="mb-0">Двухфакторная аутентификация (2FA)</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if current_user.two_factor_enabled %}
+                                <div class="alert alert-success">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                    </svg>
+                                    <strong>2FA включена</strong> - при входе требуется код подтверждения
+                                </div>
+                                <form method="POST">
+                                    <input type="hidden" name="action" value="disable_2fa">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите отключить двухфакторную аутентификацию?')">
+                                        Отключить 2FA
+                                    </button>
+                                </form>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                                        <path d="M8 1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h5zM3 0a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h5a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"/>
+                                        <path d="M5 6h1v1H5V6zm2 0h1v1H7V6zm-2 2h1v1H5V8zm2 0h1v1H7V8z"/>
+                                    </svg>
+                                    <strong>2FA отключена</strong> - ваш аккаунт менее защищен
+                                </div>
+                                <form method="POST">
+                                    <input type="hidden" name="action" value="enable_2fa">
+                                    <button type="submit" class="btn btn-success" {% if not current_user.email %}disabled{% endif %}>
+                                        Включить 2FA
+                                    </button>
+                                    {% if not current_user.email %}
+                                        <small class="text-muted ms-2">Сначала укажите email в разделе выше</small>
+                                    {% endif %}
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для смены аватара -->
+<div class="modal fade" id="avatarModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Изменить аватар</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('update_avatar') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">URL изображения</label>
+                        <input type="url" class="form-control" name="avatar_url" placeholder="https://example.com/avatar.jpg">
+                        <div class="form-text">Введите прямую ссылку на изображение для аватара</div>
+                    </div>
+                    <div class="text-center">
+                        <img src="https://ui-avatars.com/api/?background=0D6EFD&color=fff&name={{ current_user.username }}"
+                             alt="Preview"
+                             class="rounded-circle"
+                             style="width: 100px; height: 100px; object-fit: cover;"
+                             id="avatarPreview">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Предпросмотр аватара
+    document.querySelector('input[name="avatar_url"]')?.addEventListener('input', function() {
+        const preview = document.getElementById('avatarPreview');
+        if (this.value) {
+            preview.src = this.value;
+        } else {
+            preview.src = 'https://ui-avatars.com/api/?background=0D6EFD&color=fff&name={{ current_user.username }}';
+        }
+    });
+</script>
+{% endblock %}

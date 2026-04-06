@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Корзина - PC Components Store
+{% endblock %}
+
+{% block menu %}
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+     <img src="{{ url_for('static', filename='img/icon1.png') }}" alt="Logo" width="30" height="30">
+      PC Components Store
+    </a>
+    <div class="ms-auto">
+      {% if current_user.is_authenticated %}
+        <span class="navbar-text me-3 text-white">Привет, {{ current_user.username }}!</span>
+        <a href="/logout" class="btn btn-outline-danger btn-sm">Выйти</a>
+      {% else %}
+        <a href="/login" class="btn btn-outline-light me-2">Вход</a>
+        <a href="/signin" class="btn btn-primary">Регистрация</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+<div class="bg-secondary bg-opacity-10 py-2">
+  <div class="container">
+    <ul class="nav nav-pills">
+      <li class="nav-item"><a href="/" class="nav-link text-dark">Главная</a></li>
+      <li class="nav-item"><a href="/about" class="nav-link text-dark">Про нас</a></li>
+      <li class="nav-item"><a href="/catalog" class="nav-link text-dark">Каталог</a></li>
+      <li class="nav-item"><a href="/cart" class="nav-link text-dark">Корзина</a></li>
+      {% if current_user.is_authenticated %}
+        <li class="nav-item"><a href="/profile" class="nav-link text-dark">Профиль</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block main %}
+<div class="container py-4">
+  <h1 class="mb-4">🛒 Корзина товаров</h1>
+  
+  {% if cart_items %}
+    <div class="row">
+      <div class="col-md-8">
+        {% for item in cart_items %}
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-md-2 col-12 text-center mb-3 mb-md-0">
+                <img src="{{ item.product.image }}" alt="{{ item.product.name }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+              </div>
+              <div class="col-md-4 col-12 mb-3 mb-md-0">
+                <h5 class="mb-1">{{ item.product.name }}</h5>
+                <p class="text-muted small mb-0">{{ item.product.specs[:50] }}...</p>
+              </div>
+              <div class="col-md-3 col-12 mb-3 mb-md-0">
+                <form action="{{ url_for('update_cart', item_id=item.id) }}" method="POST" class="d-flex align-items-center justify-content-center justify-content-md-start">
+                  <button type="submit" name="action" value="decrease" class="btn btn-sm btn-outline-secondary" {% if item.quantity <= 1 %}disabled{% endif %}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                    </svg>
+                  </button>
+                  <span class="mx-3" style="min-width: 40px; text-align: center;">{{ item.quantity }}</span>
+                  <button type="submit" name="action" value="increase" class="btn btn-sm btn-outline-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                  </button>
+                </form>
+              </div>
+              <div class="col-md-2 col-12 mb-3 mb-md-0">
+                <div class="text-center text-md-start">
+                  <span class="h5 text-primary">{{ (item.product.price * item.quantity)|round|int|string }}₽</span>
+                  <span class="text-muted"> × {{ item.quantity }}</span>
+                </div>
+              </div>
+              <div class="col-md-1 col-12 text-center text-md-end">
+                <form action="{{ url_for('update_cart', item_id=item.id) }}" method="POST">
+                  <button type="submit" name="action" value="remove" class="btn btn-danger btn-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Итого</h5>
+            <hr>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Товары ({{ cart_items|sum(attribute='quantity') }} шт.):</span>
+              <span>{{ total|round|int|string }}₽</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between mb-3">
+              <strong>Итого к оплате:</strong>
+              <strong class="h5 text-primary">{{ total|round|int|string }}₽</strong>
+            </div>
+            <a href="{{ url_for('checkout') }}" class="btn btn-success btn-lg w-100 mb-2">
+              Оформить заказ
+            </a>
+            <a href="/catalog" class="btn btn-outline-secondary w-100">
+              Продолжить покупки
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="text-center py-5">
+      <img src="https://img.icons8.com/ios-glyphs/200/000000/shopping-cart--v1.png" alt="Пустая корзина" style="width: 150px; opacity: 0.5;">
+      <h3 class="mt-4">Ваша корзина пуста</h3>
+      <p class="text-muted">Добавьте товары в корзину, чтобы продолжить покупки</p>
+      <a href="/catalog" class="btn btn-primary btn-lg mt-3">Перейти в каталог</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Регистрация - PC Components Store
+{% endblock %}
+
+{% block menu %}
+
+{% endblock %}
+
+{% block main %}
+<div class="d-flex justify-content-center">
+    <form class="needs-validation" method="POST" style="max-width: 400px; width: 100%;">
+        <div class="mb-3">
+            <label for="username" class="form-label">Логин</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+            <div class="form-text">Email понадобится для двухфакторной аутентификации</div>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Пароль</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="mb-3">
+            <label for="conf_password" class="form-label">Подтвердите пароль</label>
+            <input type="password" class="form-control" id="conf_password" name="conf_password" required>
+        </div>
+
+        <div class="mb-3 d-flex gap-2">
+            <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">На главную</a>
+        </div>
+
+        <div class="text-center mt-3">
+            <p class="text-muted">Уже есть аккаунт? <a href="{{ url_for('login') }}">Войдите</a></p>
+        </div>
+    </form>
+</div>
+{% endblock %}

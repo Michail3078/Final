@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Каталог товаров - PC Components Store
+{% endblock %}
+
+{% block menu %}
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+   <img src="{{ url_for('static', filename='img/icon1.png') }}" alt="Logo" width="30" height="30">
+      PC Components Store
+    </a>
+    <div class="ms-auto">
+      {% if current_user.is_authenticated %}
+        <span class="navbar-text me-3 text-white">Привет, {{ current_user.username }}!</span>
+        <a href="/logout" class="btn btn-outline-danger btn-sm">Выйти</a>
+      {% else %}
+        <a href="/login" class="btn btn-outline-light me-2">Вход</a>
+        <a href="/signin" class="btn btn-primary">Регистрация</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+<div class="bg-secondary bg-opacity-10 py-2">
+  <div class="container">
+    <ul class="nav nav-pills">
+      <li class="nav-item"><a href="/" class="nav-link text-dark">Главная</a></li>
+      <li class="nav-item"><a href="/about" class="nav-link text-dark">Про нас</a></li>
+      <li class="nav-item"><a href="/catalog" class="nav-link text-dark">Каталог</a></li>
+      <li class="nav-item"><a href="/cart" class="nav-link text-dark">Корзина</a></li>
+      {% if current_user.is_authenticated %}
+        <li class="nav-item"><a href="/profile" class="nav-link text-dark">Профиль</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block main %}
+<div class="row mt-4">
+  <!-- Боковая панель с фильтрами -->
+  <div class="col-lg-3 col-md-4 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Фильтры</h5>
+      </div>
+      <div class="card-body">
+        <form method="GET" action="{{ url_for('catalog') }}">
+          <div class="mb-4">
+            <h6 class="fw-bold">Категория</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="category" value="cpu" id="catCPU" {% if 'cpu' in request.args.getlist('category') %}checked{% endif %}>
+              <label class="form-check-label" for="catCPU">Процессоры</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="category" value="gpu" id="catGPU" {% if 'gpu' in request.args.getlist('category') %}checked{% endif %}>
+              <label class="form-check-label" for="catGPU">Видеокарты</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="category" value="ram" id="catRAM" {% if 'ram' in request.args.getlist('category') %}checked{% endif %}>
+              <label class="form-check-label" for="catRAM">Оперативная память</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="category" value="storage" id="catStorage" {% if 'storage' in request.args.getlist('category') %}checked{% endif %}>
+              <label class="form-check-label" for="catStorage">Накопители SSD/HDD</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="category" value="mb" id="catMB" {% if 'mb' in request.args.getlist('category') %}checked{% endif %}>
+              <label class="form-check-label" for="catMB">Материнские платы</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="category" value="psu" id="catPSU" {% if 'psu' in request.args.getlist('category') %}checked{% endif %}>
+              <label class="form-check-label" for="catPSU">Блоки питания</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="category" value="cooler" id="catCooler" {% if 'cooler' in request.args.getlist('category') %}checked{% endif %}>
+              <label class="form-check-label" for="catCooler">Охлаждение</label>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <h6 class="fw-bold">Цена, ₽</h6>
+            <div class="row g-2">
+              <div class="col-6">
+                <input type="number" class="form-control form-control-sm" name="price_min" placeholder="от" value="{{ request.args.get('price_min', '') }}">
+              </div>
+              <div class="col-6">
+                <input type="number" class="form-control form-control-sm" name="price_max" placeholder="до" value="{{ request.args.get('price_max', '') }}">
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <h6 class="fw-bold">Производитель</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="Intel" id="brandIntel" {% if 'Intel' in request.args.getlist('brand') %}checked{% endif %}>
+              <label class="form-check-label" for="brandIntel">Intel</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="AMD" id="brandAMD" {% if 'AMD' in request.args.getlist('brand') %}checked{% endif %}>
+              <label class="form-check-label" for="brandAMD">AMD</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="NVIDIA" id="brandNVIDIA" {% if 'NVIDIA' in request.args.getlist('brand') %}checked{% endif %}>
+              <label class="form-check-label" for="brandNVIDIA">NVIDIA</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="Samsung" id="brandSamsung" {% if 'Samsung' in request.args.getlist('brand') %}checked{% endif %}>
+              <label class="form-check-label" for="brandSamsung">Samsung</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="Corsair" id="brandCorsair" {% if 'Corsair' in request.args.getlist('brand') %}checked{% endif %}>
+              <label class="form-check-label" for="brandCorsair">Corsair</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="ASUS" id="brandASUS" {% if 'ASUS' in request.args.getlist('brand') %}checked{% endif %}>
+              <label class="form-check-label" for="brandASUS">ASUS</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="MSI" id="brandMSI" {% if 'MSI' in request.args.getlist('brand') %}checked{% endif %}>
+              <label class="form-check-label" for="brandMSI">MSI</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="Kingston" id="brandKingston" {% if 'Kingston' in request.args.getlist('brand') %}checked{% endif %}>
+              <label class="form-check-label" for="brandKingston">Kingston</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="Western Digital" id="brandWD" {% if 'Western Digital' in request.args.getlist('brand') %}checked{% endif %}>
+              <label class="form-check-label" for="brandWD">Western Digital</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="Noctua" id="brandNoctua" {% if 'Noctua' in request.args.getlist('brand') %}checked{% endif %}>
+              <label class="form-check-label" for="brandNoctua">Noctua</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" name="brand" value="Arctic" id="brandArctic" {% if 'Arctic' in request.args.getlist('brand') %}checked{% endif %}>
+              <label class="form-check-label" for="brandArctic">Arctic</label>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <h6 class="fw-bold">Сортировка</h6>
+            <select class="form-select form-select-sm" name="sort">
+              <option value="default" {% if request.args.get('sort') == 'default' or not request.args.get('sort') %}selected{% endif %}>По умолчанию</option>
+              <option value="price_asc" {% if request.args.get('sort') == 'price_asc' %}selected{% endif %}>Цена: по возрастанию</option>
+              <option value="price_desc" {% if request.args.get('sort') == 'price_desc' %}selected{% endif %}>Цена: по убыванию</option>
+              <option value="name_asc" {% if request.args.get('sort') == 'name_asc' %}selected{% endif %}>Название: А-Я</option>
+              <option value="name_desc" {% if request.args.get('sort') == 'name_desc' %}selected{% endif %}>Название: Я-А</option>
+              <option value="rating_desc" {% if request.args.get('sort') == 'rating_desc' %}selected{% endif %}>По рейтингу</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-dark w-100 mb-2">Применить</button>
+          <a href="{{ url_for('catalog') }}" class="btn btn-outline-secondary w-100">Сбросить</a>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Основной контент каталога -->
+  <div class="col-lg-9 col-md-8">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3>Каталог товаров</h3>
+      <div class="text-muted">Найдено товаров: {{ products|length }}</div>
+    </div>
+
+    {% if products %}
+      <div class="row g-4">
+        {% for product in products %}
+        <div class="col-lg-4 col-md-6">
+          <div class="card product-card h-100 shadow-sm">
+            <div class="position-relative">
+              <img src="{{ product.image }}" class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: cover; border-radius: 8px 8px 0 0;">
+              <span class="badge {% if product.stock > 0 %}bg-success{% else %}bg-danger{% endif %} position-absolute top-0 end-0 m-2">
+                {% if product.stock > 0 %}В наличии{% else %}Нет в наличии{% endif %}
+              </span>
+            </div>
+            <div class="card-body">
+              <span class="badge bg-primary mb-2">{{ product.category_name }}</span>
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text text-muted small">{{ product.specs[:80] }}{% if product.specs|length > 80 %}...{% endif %}</p>
+              <div class="mb-2">
+                {% for i in range(product.rating|int) %}⭐{% endfor %}
+                {% if product.rating % 1 >= 0.5 %}½{% endif %}
+                {% for i in range(5 - (product.rating|round(0, 'ceil')|int)) %}☆{% endfor %}
+                <small class="text-muted">({{ product.rating }})</small>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mt-3">
+                <span class="h5 mb-0 text-primary">{{ product.price|round|int|string }}₽</span>
+                {% if current_user.is_authenticated %}
+                  <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn btn-sm btn-dark">В корзину</a>
+                {% else %}
+                  <a href="{{ url_for('login') }}" class="btn btn-sm btn-outline-dark">Войдите чтобы купить</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-center py-5">
+        <img src="https://img.icons8.com/ios-glyphs/200/000000/nothing-found.png" alt="Ничего не найдено" style="width: 150px; opacity: 0.5;">
+        <h4 class="mt-4">Товары не найдены</h4>
+        <p class="text-muted">Попробуйте изменить параметры фильтрации</p>
+        <a href="{{ url_for('catalog') }}" class="btn btn-primary">Сбросить фильтры</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .product-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+</style>
+{% endblock %}

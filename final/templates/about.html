@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+
+{% block title %}
+О нас - PC Components Store
+{% endblock %}
+
+{% block menu %}
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+     <img src="{{ url_for('static', filename='img/icon1.png') }}" alt="Logo" width="30" height="30">
+      PC Components Store
+    </a>
+    <div class="ms-auto">
+      {% if current_user.is_authenticated %}
+        <span class="navbar-text me-3 text-white">Привет, {{ current_user.username }}!</span>
+        <a href="/logout" class="btn btn-outline-danger btn-sm">Выйти</a>
+      {% else %}
+        <a href="/login" class="btn btn-outline-light me-2">Вход</a>
+        <a href="/signin" class="btn btn-primary">Регистрация</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+<!-- Навигационное меню -->
+<div class="bg-secondary bg-opacity-10 py-2">
+  <div class="container">
+    <ul class="nav nav-pills">
+      <li class="nav-item"><a href="/" class="nav-link text-dark">Главная</a></li>
+      <li class="nav-item"><a href="/about" class="nav-link text-dark">Про нас</a></li>
+      <li class="nav-item"><a href="/catalog" class="nav-link text-dark">Каталог</a></li>
+      <li class="nav-item"><a href="/cart" class="nav-link text-dark">Корзина</a></li>
+      {% if current_user.is_authenticated %}
+        <li class="nav-item"><a href="/profile" class="nav-link text-dark">Профиль</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block main %}
+
+<!-- Герой-секция -->
+<div class="position-relative overflow-hidden bg-dark text-white rounded-4 p-5 mb-5 text-center shadow-lg" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+  <div class="container py-5">
+    <h1 class="display-3 fw-bold mb-3">О нас</h1>
+    <p class="lead fs-4 mb-4">PC Components Store — ваш надежный партнер в мире компьютерных технологий</p>
+    <div class="d-flex justify-content-center gap-3">
+      <span class="badge bg-primary fs-6 px-3 py-2">Более 5000+ клиентов</span>
+      <span class="badge bg-success fs-6 px-3 py-2">5 лет на рынке</span>
+      <span class="badge bg-warning text-dark fs-6 px-3 py-2">1000+ товаров</span>
+    </div>
+  </div>
+</div>
+
+<!-- Наша миссия -->
+<div class="row align-items-center mb-5">
+  <div class="col-lg-6 mb-4 mb-lg-0">
+    <h2 class="display-6 fw-bold mb-3">Наша миссия</h2>
+    <p class="lead text-muted">Сделать сборку и апгрейд компьютеров доступными, понятными и увлекательными для каждого.</p>
+    <p class="mt-3">Мы верим, что качественный компьютер — это не роскошь, а необходимый инструмент для работы, творчества и отдыха. Именно поэтому мы отбираем только лучшие компоненты от проверенных производителей и предлагаем их по честным ценам.</p>
+    <div class="mt-4">
+      <div class="d-flex align-items-center mb-3">
+        <div class="bg-primary rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
+        </div>
+        <div>
+          <h6 class="mb-0 fw-bold">Качество гарантируем</h6>
+          <small class="text-muted">Только оригинальная продукция с сертификатами</small>
+        </div>
+      </div>
+      <div class="d-flex align-items-center mb-3">
+        <div class="bg-primary rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 16 16"><path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>
+        </div>
+        <div>
+          <h6 class="mb-0 fw-bold">Быстрая доставка</h6>
+          <small class="text-muted">По Москве за 1-2 дня, по России от 3 дней</small>
+        </div>
+      </div>
+      <div class="d-flex align-items-center">
+        <div class="bg-primary rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 16 16"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z"/></svg>
+        </div>
+        <div>
+          <h6 class="mb-0 fw-bold">Гарантия на все товары</h6>
+          <small class="text-muted">12-36 месяцев от производителя</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <img src="{{ url_for('static', filename='img/store.jpg') }}" alt="Наш магазин" class="img-fluid rounded-4 shadow-lg">
+  </div>
+</div>
+
+<!-- Наши преимущества -->
+<h2 class="text-center mb-5 display-6 fw-bold">Почему выбирают нас?</h2>
+<div class="row g-4 mb-5">
+  <div class="col-md-4">
+    <div class="card h-100 border-0 shadow-sm text-center p-4">
+      <div class="mb-3">
+        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#0d6efd" viewBox="0 0 16 16">
+            <path d="M8 1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h5zM3 0a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h5a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"/>
+            <path d="M5 6h1v1H5V6zm2 0h1v1H7V6zm-2 2h1v1H5V8zm2 0h1v1H7V8zm2-4h1v1H9V4zm0 2h1v1H9V6z"/>
+          </svg>
+        </div>
+      </div>
+      <h5 class="fw-bold">Экспертная консультация</h5>
+      <p class="text-muted">Наши специалисты помогут подобрать компоненты под любые задачи и бюджет</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 border-0 shadow-sm text-center p-4">
+      <div class="mb-3">
+        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#198754" viewBox="0 0 16 16">
+            <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z"/>
+            <path d="M8 4a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0v-6A.5.5 0 0 1 8 4zM4.5 6.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5zm7 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5z"/>
+          </svg>
+        </div>
+      </div>
+      <h5 class="fw-bold">Сборка ПК под ключ</h5>
+      <p class="text-muted">Соберем и настроим компьютер любой сложности с гарантией совместимости</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 border-0 shadow-sm text-center p-4">
+      <div class="mb-3">
+        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex p-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#ffc107" viewBox="0 0 16 16">
+            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
+            <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 10.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+          </svg>
+        </div>
+      </div>
+      <h5 class="fw-bold">Удобные способы оплаты</h5>
+      <p class="text-muted">Наличные, банковские карты, рассрочка от банков-партнеров</p>
+    </div>
+  </div>
+</div>
+
+<!-- Наша команда -->
+<h2 class="text-center mb-5 display-6 fw-bold">Наша команда</h2>
+<div class="row g-4 mb-5">
+  <div class="col-lg-3 col-md-6">
+    <div class="card border-0 shadow-sm text-center">
+      <img src="https://randomuser.me/api/portraits/men/32.jpg" class="card-img-top rounded-circle mx-auto mt-4" style="width: 120px; height: 120px; object-fit: cover;" alt="Алексей">
+      <div class="card-body">
+        <h5 class="card-title fw-bold mb-1">Алексей Смирнов</h5>
+        <p class="text-muted small">Основатель и CEO</p>
+        <p class="card-text small">Более 10 лет в IT-индустрии. Эксперт по сборке высокопроизводительных систем.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="card border-0 shadow-sm text-center">
+      <img src="https://randomuser.me/api/portraits/women/68.jpg" class="card-img-top rounded-circle mx-auto mt-4" style="width: 120px; height: 120px; object-fit: cover;" alt="Мария">
+      <div class="card-body">
+        <h5 class="card-title fw-bold mb-1">Мария Волкова</h5>
+        <p class="text-muted small">Руководитель отдела продаж</p>
+        <p class="card-text small">Поможет подобрать оптимальную конфигурацию под любой бюджет.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="card border-0 shadow-sm text-center">
+      <img src="https://randomuser.me/api/portraits/men/45.jpg" class="card-img-top rounded-circle mx-auto mt-4" style="width: 120px; height: 120px; object-fit: cover;" alt="Дмитрий">
+      <div class="card-body">
+        <h5 class="card-title fw-bold mb-1">Дмитрий Козлов</h5>
+        <p class="text-muted small">Технический специалист</p>
+        <p class="card-text small">Сертифицированный инженер Intel и AMD. Отвечает за сборку и тестирование.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6">
+    <div class="card border-0 shadow-sm text-center">
+      <img src="https://randomuser.me/api/portraits/women/33.jpg" class="card-img-top rounded-circle mx-auto mt-4" style="width: 120px; height: 120px; object-fit: cover;" alt="Анна">
+      <div class="card-body">
+        <h5 class="card-title fw-bold mb-1">Анна Морозова</h5>
+        <p class="text-muted small">Служба поддержки</p>
+        <p class="card-text small">Всегда на связи и готова решить любой вопрос клиентов.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Отзывы клиентов -->
+<h2 class="text-center mb-5 display-6 fw-bold">Что говорят наши клиенты</h2>
+<div class="row g-4 mb-5">
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <div class="mb-3 text-warning">
+          ★★★★★
+        </div>
+        <p class="card-text fst-italic">"Отличный магазин! Заказывал комплектующие для нового ПК. Все приехало быстро, в идеальной упаковке. Цены ниже, чем у конкурентов. Отдельное спасибо за консультацию по выбору материнской платы."</p>
+        <div class="mt-3">
+          <h6 class="mb-0">Иван Петров</h6>
+          <small class="text-muted">г. Москва</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <div class="mb-3 text-warning">
+          ★★★★★
+        </div>
+        <p class="card-text fst-italic">"Покупал видеокарту RTX 4070. Цена была самой низкой на рынке. Доставили на следующий день. Товар оригинальный, с гарантией. Буду заказывать еще!"</p>
+        <div class="mt-3">
+          <h6 class="mb-0">Екатерина Соколова</h6>
+          <small class="text-muted">г. Санкт-Петербург</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <div class="mb-3 text-warning">
+          ★★★★★
+        </div>
+        <p class="card-text fst-italic">"Заказывал сборку ПК под ключ. Ребята все сделали на высшем уровне: от подбора компонентов до настройки ПО. Компьютер работает отлично. Рекомендую!"</p>
+        <div class="mt-3">
+          <h6 class="mb-0">Михаил Воробьев</h6>
+          <small class="text-muted">г. Новосибирск</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Контакты -->
+<h2 id="contacts" class="text-center mb-5 display-6 fw-bold">Контакты</h2>
+<div class="row g-4 mb-5">
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-4">
+        <h4 class="mb-4 fw-bold">Свяжитесь с нами</h4>
+
+        <div class="d-flex mb-3">
+          <div class="me-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#0d6efd" viewBox="0 0 16 16">
+              <path d="M8 1a5 5 0 0 0-5 5c0 5 5 9 5 9s5-4 5-9a5 5 0 0 0-5-5zm0 6.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+            </svg>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-1">Адрес</h6>
+            <p class="text-muted mb-0">г. Москва, ул. Тверская, д. 25, ТЦ "Электронный мир", 3 этаж</p>
+          </div>
+        </div>
+
+        <div class="d-flex mb-3">
+          <div class="me-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#0d6efd" viewBox="0 0 16 16">
+              <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328z"/>
+            </svg>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-1">Телефон</h6>
+            <p class="text-muted mb-0">+7 (495) 123-45-67</p>
+          </div>
+        </div>
+
+        <div class="d-flex mb-3">
+          <div class="me-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#0d6efd" viewBox="0 0 16 16">
+              <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+            </svg>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-1">Email</h6>
+            <p class="text-muted mb-0">info@pcstore.ru</p>
+          </div>
+        </div>
+
+        <div class="d-flex">
+          <div class="me-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#0d6efd" viewBox="0 0 16 16">
+              <path d="M8 1a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h5zM3 0a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h5a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3H3z"/>
+              <path d="M5 6h1v1H5V6zm2 0h1v1H7V6zm-2 2h1v1H5V8zm2 0h1v1H7V8zm2-4h1v1H9V4zm0 2h1v1H9V6z"/>
+            </svg>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-1">Режим работы</h6>
+            <p class="text-muted mb-0">Пн-Пт: 10:00 - 20:00<br>Сб-Вс: 11:00 - 18:00</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="card-body p-0 overflow-hidden rounded-4">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1x2245.8152361998725!2d37.60485897666097!3d55.75699387303449!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a5b2f7091ed%3A0xa6b78c6fcebd8e73!2z0JLRg9C70LrQsNC90YHQutC40Lkg0L_QtdGALiA4LCDQnNC-0YHQutCy0LAsINCg0L7RgdGB0LjRjywgMTIxMDU5!5e0!3m2!1sru!2s!4v1700000000000!5m2!1sru!2s"
+          width="100%"
+          height="400"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Партнеры -->
+<div class="text-center mb-4">
+  <h6 class="text-muted mb-4">Наши партнеры</h6>
+  <div class="d-flex justify-content-center flex-wrap gap-4 align-items-center">
+    <img src="https://img.icons8.com/color/80/000000/intel.png" alt="Intel">
+    <img src="https://img.icons8.com/color/80/000000/amd.png" alt="AMD">
+    <img src="https://img.icons8.com/color/80/000000/nvidia.png" alt="NVIDIA">
+    <img src="https://img.icons8.com/color/80/000000/samsung.png" alt="Samsung">
+    <img src="https://img.icons8.com/color/80/000000/corsair.png" alt="Corsair">
+  </div>
+</div>
+
+{% endblock %}

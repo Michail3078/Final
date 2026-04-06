@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Оформление заказа - PC Components Store
+{% endblock %}
+
+{% block menu %}
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+     <img src="{{ url_for('static', filename='img/icon1.png') }}" alt="Logo" width="30" height="30">
+      PC Components Store
+    </a>
+    <div class="ms-auto">
+      {% if current_user.is_authenticated %}
+        <span class="navbar-text me-3 text-white">Привет, {{ current_user.username }}!</span>
+        <a href="/logout" class="btn btn-outline-danger btn-sm">Выйти</a>
+      {% else %}
+        <a href="/login" class="btn btn-outline-light me-2">Вход</a>
+        <a href="/signin" class="btn btn-primary">Регистрация</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+<div class="bg-secondary bg-opacity-10 py-2">
+  <div class="container">
+    <ul class="nav nav-pills">
+      <li class="nav-item"><a href="/" class="nav-link text-dark">Главная</a></li>
+      <li class="nav-item"><a href="/about" class="nav-link text-dark">Про нас</a></li>
+      <li class="nav-item"><a href="/catalog" class="nav-link text-dark">Каталог</a></li>
+      <li class="nav-item"><a href="/cart" class="nav-link text-dark">Корзина</a></li>
+      {% if current_user.is_authenticated %}
+        <li class="nav-item"><a href="/profile" class="nav-link text-dark">Профиль</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block main %}
+<div class="container py-4">
+  <h1 class="mb-4">📝 Оформление заказа</h1>
+  
+  <div class="row">
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Контактная информация</h5>
+          <form method="POST">
+            <div class="mb-3">
+              <label for="phone" class="form-label">Телефон *</label>
+              <input type="tel" class="form-control" id="phone" name="phone" required placeholder="+7 (XXX) XXX-XX-XX">
+            </div>
+            
+            <div class="mb-3">
+              <label for="address" class="form-label">Адрес доставки *</label>
+              <input type="text" class="form-control" id="address" name="address" required placeholder="Город, улица, дом, квартира">
+            </div>
+            
+            <h5 class="card-title mt-4">Способ доставки</h5>
+            <div class="mb-3">
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="delivery_method" id="delivery1" value="Курьером по Москве" data-price="500" checked>
+                <label class="form-check-label" for="delivery1">
+                  Курьером по Москве - 500₽ (1-2 дня)
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="delivery_method" id="delivery2" value="Почта России" data-price="350">
+                <label class="form-check-label" for="delivery2">
+                  Почта России - 350₽ (3-7 дней)
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" name="delivery_method" id="delivery3" value="СДЭК" data-price="450">
+                <label class="form-check-label" for="delivery3">
+                  СДЭК - 450₽ (2-5 дней)
+                </label>
+              </div>
+            </div>
+            
+            <input type="hidden" name="delivery_price" id="delivery_price" value="500">
+            
+            <button type="submit" class="btn btn-success btn-lg w-100 mt-3">
+              Подтвердить заказ
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Ваш заказ</h5>
+          <hr>
+          {% for item in cart_items %}
+          <div class="d-flex justify-content-between mb-2">
+            <span>{{ item.product.name }} × {{ item.quantity }}</span>
+            <span>{{ (item.product.price * item.quantity)|round|int|string }}₽</span>
+          </div>
+          {% endfor %}
+          <hr>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Товары:</span>
+            <span>{{ total|round|int|string }}₽</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2" id="delivery_row">
+            <span>Доставка:</span>
+            <span id="delivery_amount">500₽</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between">
+            <strong>Итого:</strong>
+            <strong class="h5 text-primary" id="total_amount">{{ (total + 500)|round|int|string }}₽</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Обновление суммы доставки при выборе способа
+  const deliveryRadios = document.querySelectorAll('input[name="delivery_method"]');
+  const deliveryAmount = document.getElementById('delivery_amount');
+  const totalAmount = document.getElementById('total_amount');
+  const deliveryPriceInput = document.getElementById('delivery_price');
+  const total = {{ total }};
+  
+  deliveryRadios.forEach(radio => {
+    radio.addEventListener('change', function() {
+      const price = parseInt(this.getAttribute('data-price'));
+      deliveryAmount.textContent = price + '₽';
+      deliveryPriceInput.value = price;
+      totalAmount.textContent = (total + price).toLocaleString() + '₽';
+    });
+  });
+</script>
+{% endblock %}
