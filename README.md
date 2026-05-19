@@ -103,7 +103,7 @@ ___
 Если используете GitHub:
 
 ```powershell
-git clone https://github.com/Michail3078/Final
+git clone https://github.com/Michail3078/Final/final
 ```
 
 #### 2. Создание и активация виртуального окружения
