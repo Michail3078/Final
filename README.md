@@ -3,7 +3,8 @@
 ___
 
 
-## *Ссылка на презентацию*
+## *[Презентация](https://disk.yandex.ru/d/0Z536Dy1tFWI2Q)*
+## *[Сайт](https://bvvk.pythonanywhere.com)*
 
 ___
 
@@ -44,6 +45,8 @@ ___
 ├─ requirements.txt     # Список зависимостей
 ├─ instance/
 │  └─ main.db           # База данных SQLite
+├─ static/
+|  └─ img/              # Папка с изображениями
 ├─ templates/
    ├─ base.html
    ├─ index.html
@@ -53,6 +56,7 @@ ___
    ├─ catalog.html
    ├─ checkout.html
    ├─ profile.html
+   ├─ verify_2fa.html
    └─ signin.html
 ```
 
